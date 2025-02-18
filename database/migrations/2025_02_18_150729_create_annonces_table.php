@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('email',40);
             $table->string('phone',40);
             $table->enum('status',['en attend','trouve','recupere'])->default('recupere');
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('id_categorie')->constrained('categories')->onDelete('cascade');
         });
     }
 
