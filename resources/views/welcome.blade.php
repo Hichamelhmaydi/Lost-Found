@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <script src="https://cdn.tailwindcss.com"></script>
         <title>Laravel</title>
 
         <!-- Fonts -->
@@ -16,9 +16,14 @@
         </style>
     </head>
     <body class="antialiased">
-        <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-            @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+        <nav class="p-4 bg-blue-600">
+            <div class="flex items-center justify-between max-w-screen-xl mx-auto text-white">
+              <a href="#" class="text-2xl font-semibold">Lost&Found</a>
+              <div>
+                <a href="#" class="px-4">Accueil</a>
+                <a href="#" class="px-4">Publier une annonce</a>
+                <a href="#" class="px-4">Se connecter</a>
+                @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
                     @else
@@ -30,6 +35,39 @@
                     @endauth
                 </div>
             @endif
-        </div>
+              </div>
+            </div>
+        </nav>
+     
+        <div class="max-w-screen-xl px-4 mx-auto my-8">
+            <div class="flex items-center justify-between">
+              <input type="text" placeholder="Rechercher un objet..." class="w-2/3 p-2 border rounded md:w-1/2">
+              <div class="flex space-x-4">
+                <select class="p-2 border rounded">
+                  <option>Tout</option>
+                  <option>Vêtements</option>
+                  <option>Appareils électroniques</option>
+                  <option>Clés</option>
+                </select>
+                <select class="p-2 border rounded">
+                  <option>Tout</option>
+                  <option>Paris</option>
+                  <option>Lyon</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Announcements Grid -->
+          <div class="grid max-w-screen-xl grid-cols-1 gap-8 px-4 mx-auto md:grid-cols-2 lg:grid-cols-3">
+            <!-- Announcement Card -->
+            <div class="overflow-hidden bg-white rounded-lg shadow-md">
+              <img src="https://via.placeholder.com/300x200" alt="Objet" class="object-cover w-full h-48">
+              <div class="p-4">
+                <h2 class="text-xl font-semibold">Titre de l'annonce</h2>
+                <p class="mt-2 text-sm text-gray-600">Description de l'annonce ici...</p>
+                <a href="#" class="inline-block mt-4 text-blue-600">Détails de l'annonce</a>
+              </div>
+            </div>
     </body>
 </html>
