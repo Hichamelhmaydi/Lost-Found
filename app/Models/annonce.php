@@ -9,14 +9,16 @@ class annonce extends Model
 {
     use HasFactory;
     private $titre;
-    protected $fillable=[
+    protected $fillable = [
         'titre',
         'description',
         'lieu',
-        'date_trouv_perte',
-        'image',
+        'photo', 
         'email',
-        'phone',
-        'status'
-    ]; 
+        'tele',
+        'status',
+        'categorie_id',
+        'user_id'
+    ];
+    
 }

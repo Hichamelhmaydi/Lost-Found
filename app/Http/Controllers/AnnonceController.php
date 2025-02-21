@@ -2,63 +2,112 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Annonce;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 
 class AnnonceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $annonces = Annonce::all(); 
+    
+        return view('welcome', compact('annonces'));
     }
+    
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $categories = Categories::all();  
+        return view('annonces.create', compact('categories'));  
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+    
+        $request->validate([
+            'titre' => 'required|max:20',
+            'description' => 'required',
+            'lieu' => 'required|max:20',
+            'photo' => 'required|image|mimes:jpeg,png,jpg',
+            'email' => 'required|email|max:40',
+            'tele' => 'required|max:40',
+            'status' => 'required|in:en attend,trouve,perdu',
+            'categorie_id' => 'required|exists:categories,id',
+        ]);
+    
+        $imageName = null;
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/images', $imageName);
+        }
+    
+        Annonce::create([
+            'titre' => $request->titre,
+            'description' => $request->description,
+            'lieu' => $request->lieu,
+            'photo' => $imageName,
+            'email' => $request->email,
+            'tele' => $request->tele,
+            'status' => $request->status,
+            'categorie_id' => $request->categorie_id,
+            'user_id' => auth()->id(), // تحديد user_id أثناء الإنشاء
+        ]);
+        
+    
+        return redirect()->route('annonces.index');
+    }
+    public function show($id)
+    {
+        $annonce = Annonce::findOrFail($id);
+        return view('annonces.show', compact('annonce'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $annonce = Annonce::findOrFail($id);
+        $categories = Categories::all();
+        return view('annonces.edit', compact('annonce', 'categories'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'titre' => 'required|max:100',
+            'description' => 'required',
+            'lieu' => 'required',
+            'photo' => 'nullable|image',
+            'email' => 'required|email',
+            'tele' => 'required',
+            'status' => 'required|in:en attend,trouve,perdu',
+            'categorie_id' => 'required|exists:categories,id',
+        ]);
+
+        $annonce = Annonce::findOrFail($id);
+        $photoPath = $request->file('photo') ? $request->file('photo')->store('photos', 'public') : $annonce->photo;
+
+        $annonce->update([
+            'titre' => $request->titre,
+            'description' => $request->description,
+            'lieu' => $request->lieu,
+            'photo' => $photoPath,
+            'email' => $request->email,
+            'tele' => $request->tele,
+            'status' => $request->status,
+            'categorie_id' => $request->categorie_id,
+        ]);
+
+        return redirect()->route('annonces.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $annonce = Annonce::findOrFail($id);
+        $annonce->delete();
+        return redirect()->route('annonces.index');
     }
 }

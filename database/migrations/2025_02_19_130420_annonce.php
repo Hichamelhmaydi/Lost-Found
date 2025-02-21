@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('titre', 20);
             $table->text('description');
             $table->string('lieu', 20);
-            $table->binary('photo');
+            $table->string('photo')->nullable(); 
             $table->string('email', 40);
             $table->string('tele', 40);
             $table->enum('status', ['en attend', 'trouve', 'perdu'])->default('en attend');
