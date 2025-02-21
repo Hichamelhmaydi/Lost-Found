@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('commentaire', function (Blueprint $table) {
+        Schema::create('commentaires', function (Blueprint $table) {
             $table->id();
             $table->text('description');
             $table->timestamp('date_de_commentaires')->useCurrent();
@@ -24,9 +24,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
-        Schema::table('commentaire', function (Blueprint $table) {
-            //
-        });
-    }
+{
+    Schema::dropIfExists('commentaires');
+}
 };

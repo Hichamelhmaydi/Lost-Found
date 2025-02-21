@@ -20,5 +20,9 @@ class annonce extends Model
         'categorie_id',
         'user_id'
     ];
-    
+    public function commentaires()
+{
+    return $this->hasMany(Commentaire::class);
+}
+
 }
