@@ -59,6 +59,11 @@
           </div>
         
           <!-- Announcements Grid -->
+          <div class="flex justify-end mb-4">
+            <a href="{{ route('annonces.create') }}" class="px-4 py-2 text-black transition bg-blue-600 rounded-lg shadow-md hover:bg-blue-700">
+                Ajouter une Annonce
+            </a>
+        </div>
             <!-- Announcement Card -->
             <div class="grid w-full grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($annonces as $annonce)
@@ -71,11 +76,9 @@
                     </span>
                     <div class="flex flex-wrap justify-center w-full gap-2 mt-4">
                         <a href="{{ route('annonces.show', $annonce->id) }}" class="px-4 py-2 text-sm text-white transition bg-blue-500 rounded-lg hover:bg-blue-600">Voir</a>
-                        <a href="{{ route('annonces.edit', $annonce->id) }}" class="px-4 py-2 text-sm text-white transition bg-yellow-500 rounded-lg hover:bg-yellow-600">Modifier</a>
                         <form action="{{ route('annonces.destroy', $annonce->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette annonce ?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="px-4 py-2 text-sm text-white transition bg-red-500 rounded-lg hover:bg-red-600">Supprimer</button>
                         </form>
                     </div>
                 </div>
