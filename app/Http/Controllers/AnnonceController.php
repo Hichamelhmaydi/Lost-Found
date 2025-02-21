@@ -14,14 +14,17 @@ class AnnonceController extends Controller
     
         return view('welcome', compact('annonces'));
     }
-    
-
+    public function dashboard()
+    {
+        $user = auth()->user();
+        $annonces = Annonce::where('user_id', $user->id)->paginate(10);
+        return view('dashboard', compact('annonces'));
+    }
     public function create()
     {
         $categories = Categories::all();  
         return view('annonces.create', compact('categories'));  
     }
-
     public function store(Request $request)
     {
         if (!auth()->check()) {
@@ -66,14 +69,12 @@ class AnnonceController extends Controller
         $annonce = Annonce::findOrFail($id);
         return view('annonces.show', compact('annonce'));
     }
-
     public function edit($id)
     {
         $annonce = Annonce::findOrFail($id);
         $categories = Categories::all();
         return view('annonces.edit', compact('annonce', 'categories'));
     }
-
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -103,7 +104,6 @@ class AnnonceController extends Controller
 
         return redirect()->route('annonces.index');
     }
-
     public function destroy($id)
     {
         $annonce = Annonce::findOrFail($id);
